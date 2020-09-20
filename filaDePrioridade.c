@@ -61,16 +61,22 @@ void exibirLog(PFILA f){
 /* recebe endereço de uma fila e retorna numero de elementos validos (lista sem contar o vigilante) */
 int tamanho(PFILA f){
   int tam = 0;
+  PONT end = f->fila->prox;
+  while(end != f->fila){
+    tam++;
+    end = end->prox;
+  }
   /* COMPLETAR */
 
   return tam;
 }
 
-PONT buscaSeq(PFILA l, int id){
-  PONT ant = l->fila;
+PONT buscaSeq(PFILA l, int id, PONT* ant){
+  *ant = l->fila;
   PONT atual = l->fila->prox;
-  while (atual->id < id) {
-    ant = atual;
+  l->fila->prox->id = id;
+  while (atual->id<id) {
+    *ant = atual;
     atual = atual->prox;
   }
   if (atual != l->fila && atual->id == id) return atual;
@@ -83,20 +89,17 @@ return false se:
   - o identificador seja válido, mas já houver um elemento com esse identificador na fila
 */
 bool inserirElemento(PFILA f, int id, float prioridade){
+  printf("desgraça");
   bool resposta = false;
-  if (id > 0 || id > f->maxElementos || prioridade > 999999) return resposta;
-  for (int i = 0; i < f->maxElementos; i++) {
-    if (f->arranjo[i]->id == id) return resposta; //checa se há um id desses nos ponteiros de arranjo
-  }
-  //arrumar lista
-  PONT aux = (PONT) malloc(sizeof(ELEMENTO));
-  while (aux != NULL) {
-
-  }
-  //arrumar arranjo
-
-  /* COMPLETAR */
-
+  PONT ant, aux;
+  aux = buscaSeq(f, id, &ant);
+  if (id < 0 || id > f->maxElementos || prioridade > 999999 || aux != NULL) return resposta;
+  aux = (PONT) malloc(sizeof(ELEMENTO));
+  aux->id = id;
+  aux->prioridade = prioridade;
+  aux->prox = ant->prox;
+  ant->prox->ant = aux;
+  ant->prox = aux;
   return resposta;
 }
 
