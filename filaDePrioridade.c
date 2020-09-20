@@ -70,7 +70,6 @@ int tamanho(PFILA f){
 }
 
 PONT buscaSeq(PFILA l, int id, PONT* ant){
-  printf("ta buscando aqui \n \n \n");
   *ant = l->fila;
   PONT atual = l->fila->prox;
   l->fila->prox->id = id;
@@ -87,29 +86,33 @@ return false se:
   - o identificador seja inválido (menor que zero ou maior ou igual a maxElementos);
   - o identificador seja válido, mas já houver um elemento com esse identificador na fila
 */
+void arrumarArranjo(PFILA f, PONT elemento) {
+  for(int i = 0; i < f->maxElementos; i++){
+    if(f->arranjo[i]==NULL){
+       f->arranjo[i] = elemento;
+       break;
+     }
+  }
+}
+
 bool inserirElemento(PFILA f, int id, float prioridade){
   bool resposta = false;
-  PONT ant, aux;
+  PONT ant, prox, aux;
   ant = f->fila;
   aux = buscaSeq(f, id, &ant);
   if (id < 0 || id > f->maxElementos || prioridade > 999999 || aux != NULL) return resposta;
   aux = (PONT) malloc(sizeof(ELEMENTO));
   aux->id = id;
   aux->prioridade = prioridade;
-  //elementos estao sendo sobrescritos
-  while (aux->prox != NULL) {
-    aux->prox = ant->prox;
-    ant->prox->ant = aux;
+  while (ant->prox != NULL && ant->prox->prioridade < prioridade) {
+    ant = ant->prox;
+    prox = ant->prox;
     aux->ant = ant;
+    aux->prox = ant->prox;
     ant->prox = aux;
+    prox->ant = aux;
   }
-  //arrumar arranjo AQUI
-  for(int i = 0; i < f->maxElementos; i++){
-    if(f->arranjo[i]==NULL){
-       f->arranjo[i] = aux;
-       break;
-     }
-  }
+  arrumarArranjo(f, aux);
   resposta = true;
   return resposta;
 }
