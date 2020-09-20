@@ -66,12 +66,11 @@ int tamanho(PFILA f){
     tam++;
     end = end->prox;
   }
-  /* COMPLETAR */
-
   return tam;
 }
 
 PONT buscaSeq(PFILA l, int id, PONT* ant){
+  printf("ta buscando aqui \n \n \n");
   *ant = l->fila;
   PONT atual = l->fila->prox;
   l->fila->prox->id = id;
@@ -89,17 +88,29 @@ return false se:
   - o identificador seja válido, mas já houver um elemento com esse identificador na fila
 */
 bool inserirElemento(PFILA f, int id, float prioridade){
-  printf("desgraça");
   bool resposta = false;
   PONT ant, aux;
+  ant = f->fila;
   aux = buscaSeq(f, id, &ant);
   if (id < 0 || id > f->maxElementos || prioridade > 999999 || aux != NULL) return resposta;
   aux = (PONT) malloc(sizeof(ELEMENTO));
   aux->id = id;
   aux->prioridade = prioridade;
-  aux->prox = ant->prox;
-  ant->prox->ant = aux;
-  ant->prox = aux;
+  //elementos estao sendo sobrescritos
+  while (aux->prox != NULL) {
+    aux->prox = ant->prox;
+    ant->prox->ant = aux;
+    aux->ant = ant;
+    ant->prox = aux;
+  }
+  //arrumar arranjo AQUI
+  for(int i = 0; i < f->maxElementos; i++){
+    if(f->arranjo[i]==NULL){
+       f->arranjo[i] = aux;
+       break;
+     }
+  }
+  resposta = true;
   return resposta;
 }
 
