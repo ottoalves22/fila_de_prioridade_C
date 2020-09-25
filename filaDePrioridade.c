@@ -107,6 +107,9 @@ bool inserirElemento(PFILA f, int id, float prioridade){
   //preciso inverter a insercao, ta crescente e tem de ser decrescente
   aux->prox = ant->prox;
   ant->prox = aux;
+  aux->ant = ant;
+  aux->prox->ant = aux;
+
   arrumarArranjo(f, aux);
   resposta = true;
   return resposta;
