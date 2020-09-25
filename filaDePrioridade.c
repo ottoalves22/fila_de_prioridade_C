@@ -72,7 +72,7 @@ int tamanho(PFILA f){
 PONT buscaSeq(PFILA l, int id, PONT* ant){
   *ant = l->fila;
   PONT atual = l->fila->prox;
-  l->fila->prox->id = id;
+  l->fila->id = id;
   while (atual->id<id) {
     *ant = atual;
     atual = atual->prox;
@@ -97,21 +97,16 @@ void arrumarArranjo(PFILA f, PONT elemento) {
 
 bool inserirElemento(PFILA f, int id, float prioridade){
   bool resposta = false;
-  PONT ant, prox, aux;
+  PONT ant, aux;
   ant = f->fila;
   aux = buscaSeq(f, id, &ant);
   if (id < 0 || id > f->maxElementos || prioridade > 999999 || aux != NULL) return resposta;
   aux = (PONT) malloc(sizeof(ELEMENTO));
   aux->id = id;
   aux->prioridade = prioridade;
-  while (ant->prox != NULL && ant->prox->prioridade < prioridade) {
-    ant = ant->prox;
-    prox = ant->prox;
-    aux->ant = ant;
-    aux->prox = ant->prox;
-    ant->prox = aux;
-    prox->ant = aux;
-  }
+  //preciso inverter a insercao, ta crescente e tem de ser decrescente
+  aux->prox = ant->prox;
+  ant->prox = aux;
   arrumarArranjo(f, aux);
   resposta = true;
   return resposta;
