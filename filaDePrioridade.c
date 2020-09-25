@@ -97,7 +97,7 @@ void arrumarArranjo(PFILA f, PONT elemento) {
 
 bool inserirElemento(PFILA f, int id, float prioridade){
   bool resposta = false;
-  PONT ant, aux;
+  PONT ant, aux, prox;
   ant = f->fila;
   aux = buscaSeq(f, id, &ant);
   if (id < 0 || id > f->maxElementos || prioridade > 999999 || aux != NULL) return resposta;
@@ -105,6 +105,9 @@ bool inserirElemento(PFILA f, int id, float prioridade){
   aux->id = id;
   aux->prioridade = prioridade;
   //preciso inverter a insercao, ta crescente e tem de ser decrescente
+  while (ant->prox != f->fila && prioridade <= ant->prox->prioridade){
+    ant = ant->prox;
+  }
   aux->prox = ant->prox;
   ant->prox = aux;
   aux->ant = ant;
