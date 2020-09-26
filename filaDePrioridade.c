@@ -5,7 +5,7 @@
 /**                                                                 **/
 /**   EP1 - Fila de Prioridade                                      **/
 /**                                                                 **/
-/**   <nome do(a) aluno(a)>                   <numero USP>          **/
+/**   Otto Alves                   10843361          **/
 /**                                                                 **/
 /*********************************************************************/
 /*********************************************************************/
@@ -15,7 +15,7 @@
 /**                                                                 **/
 /**   EP1 - Fila de Prioridade                                      **/
 /**                                                                 **/
-/**   <nome do(a) aluno(a)>                   <numero USP>          **/
+/**   Otto Alves                   10843361          **/
 /**                                                                 **/
 /*********************************************************************/
 
@@ -69,14 +69,9 @@ int tamanho(PFILA f){
   return tam;
 }
 
-PONT buscaSeq(PFILA l, int id, PONT* ant){
-  *ant = l->fila;
+PONT buscaSeq(PFILA l, int id){
   PONT atual = l->fila->prox;
-  l->fila->id = id;
-  while (atual->id<id) {
-    *ant = atual;
-    atual = atual->prox;
-  }
+  while (atual->id<id && atual->id > -1) atual = atual->prox;
   if (atual != l->fila && atual->id == id) return atual;
   return NULL;
 }
@@ -86,34 +81,36 @@ return false se:
   - o identificador seja inválido (menor que zero ou maior ou igual a maxElementos);
   - o identificador seja válido, mas já houver um elemento com esse identificador na fila
 */
-void arrumarArranjo(PFILA f, PONT elemento) {
-  for(int i = 0; i < f->maxElementos; i++){
-    if(f->arranjo[i]==NULL){
-       f->arranjo[i] = elemento;
-       break;
-     }
-  }
+void arrumarArranjo(PFILA f) {
+
 }
 
 bool inserirElemento(PFILA f, int id, float prioridade){
   bool resposta = false;
-  PONT ant, aux, prox;
-  ant = f->fila;
-  aux = buscaSeq(f, id, &ant);
+  PONT ant, aux;
+  aux = buscaSeq(f, id);
   if (id < 0 || id > f->maxElementos || prioridade > 999999 || aux != NULL) return resposta;
+  //aux = buscaAux(f, prioridade, &ant);
   aux = (PONT) malloc(sizeof(ELEMENTO));
   aux->id = id;
   aux->prioridade = prioridade;
-  //preciso inverter a insercao, ta crescente e tem de ser decrescente
-  while (ant->prox != f->fila && prioridade <= ant->prox->prioridade){
-    ant = ant->prox;
+  aux->prox = NULL;
+  ant = f->fila;
+  if (ant->prox == NULL) {
+    ant->prox = aux;
   }
-  aux->prox = ant->prox;
-  ant->prox = aux;
-  aux->ant = ant;
-  aux->prox->ant = aux;
+  else {
+    while (ant->prox != f->fila && ant->prox->prioridade >= prioridade){
+      ant = ant->prox;
+    }
+    aux->prox = ant->prox;
+    aux->ant = ant;
+    ant->prox = aux;
+    (aux->prox)->ant = aux;
 
-  arrumarArranjo(f, aux);
+  }
+  //preciso inverter a insercao, ta crescente e tem de ser decrescente
+  arrumarArranjo(f);
   resposta = true;
   return resposta;
 }

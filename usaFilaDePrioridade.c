@@ -33,7 +33,7 @@ int main() {
   if(aumentarPrioridade(f, 4, 4)) printf("(10) Funcao retornou true\n");
   else printf("Funcao retornou false (10) - esperado, elemento com id=4 nao existe\n");
   exibirLog(f);
-  
+
   PONT prioritario;
   prioritario = removerElemento(f);
   if (prioritario) printf("Prioritario: %i, %f\n", prioritario->id, prioritario->prioridade);
