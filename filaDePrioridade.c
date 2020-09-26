@@ -85,8 +85,7 @@ bool inserirElemento(PFILA f, int id, float prioridade){
   bool resposta = false;
   PONT ant, aux;
   aux = buscaSeq(f, id);
-  if (id < 0 || id > f->maxElementos || prioridade > 999999 || aux != NULL) return resposta;
-  //aux = buscaAux(f, prioridade, &ant);
+  if (id < 0 || id >= f->maxElementos || prioridade > 999999 || aux != NULL) return resposta;
   aux = (PONT) malloc(sizeof(ELEMENTO));
   aux->id = id;
   aux->prioridade = prioridade;
@@ -115,9 +114,10 @@ bool inserirElemento(PFILA f, int id, float prioridade){
 
 bool aumentarPrioridade(PFILA f, int id, float novaPrioridade){
   bool resposta = false;
+  PONT aux = buscaSeq(f, id);
+  if(id < 0 || id >= f->maxElementos || aux == NULL || aux->prioridade >= novaPrioridade) return resposta;
 
-  /* COMPLETAR */
-
+  resposta = true;
   return resposta;
 }
 
@@ -125,9 +125,10 @@ bool aumentarPrioridade(PFILA f, int id, float novaPrioridade){
 
 bool reduzirPrioridade(PFILA f, int id, float novaPrioridade){
   bool resposta = false;
+  PONT aux = buscaSeq(f, id);
+  if(id < 0 || id >= f->maxElementos || aux == NULL || aux->prioridade <= novaPrioridade) return resposta;
 
-  /* COMPLETAR */
-
+  resposta = true;
   return resposta;
 }
 
@@ -147,8 +148,9 @@ PONT removerElemento(PFILA f){
 
 bool consultarPrioridade(PFILA f, int id, float* resposta){
   bool resp = false;
-
-  /* COMPLETAR */
-
+  PONT aux = buscaSeq(f, id);
+  if(id < 0 || id >= f->maxElementos || aux == NULL) return resp;
+  *resposta = aux->prioridade;
+  resp = true;
   return resp;
 }
