@@ -135,9 +135,11 @@ bool reduzirPrioridade(PFILA f, int id, float novaPrioridade){
 
 PONT removerElemento(PFILA f){
   PONT resposta = NULL;
-
-  /* COMPLETAR */
-
+  if(f->fila->prox == f->fila) return resposta;
+  resposta = f->fila->prox;
+  (resposta->prox)->ant = f->fila;
+  (f->fila)->prox = resposta->prox;
+  f->arranjo[resposta->id] = NULL;
   return resposta;
 }
 
