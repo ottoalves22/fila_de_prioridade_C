@@ -81,10 +81,6 @@ return false se:
   - o identificador seja inválido (menor que zero ou maior ou igual a maxElementos);
   - o identificador seja válido, mas já houver um elemento com esse identificador na fila
 */
-void arrumarArranjo(PFILA f) {
-
-}
-
 bool inserirElemento(PFILA f, int id, float prioridade){
   bool resposta = false;
   PONT ant, aux;
@@ -110,7 +106,7 @@ bool inserirElemento(PFILA f, int id, float prioridade){
 
   }
   //preciso inverter a insercao, ta crescente e tem de ser decrescente
-  arrumarArranjo(f);
+  f->arranjo[aux->id] = aux;
   resposta = true;
   return resposta;
 }
