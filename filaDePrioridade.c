@@ -76,6 +76,7 @@ PONT buscaSeq(PFILA l, int id){
   return NULL;
 }
 
+
 /* Recebe o endereço de uma fila de prioridade, oidentificador do novo elemento e o valor de sua prioridade.
 return false se:
   - o identificador seja inválido (menor que zero ou maior ou igual a maxElementos);
@@ -104,7 +105,6 @@ bool inserirElemento(PFILA f, int id, float prioridade){
     (aux->prox)->ant = aux;
 
   }
-  //preciso inverter a insercao, ta crescente e tem de ser decrescente
   f->arranjo[aux->id] = aux;
   resposta = true;
   return resposta;
@@ -116,6 +116,19 @@ bool aumentarPrioridade(PFILA f, int id, float novaPrioridade){
   bool resposta = false;
   PONT aux = buscaSeq(f, id);
   if(id < 0 || id >= f->maxElementos || aux == NULL || aux->prioridade >= novaPrioridade) return resposta;
+  //remove elemento das estruturas sem exlui-lo
+  aux->prioridade = novaPrioridade;
+  (aux->prox)->ant = aux->ant;
+  (aux->ant)->prox = aux->prox;
+
+  PONT ant = f->fila;
+  while (ant->prox != f->fila && (ant->prox)->prioridade >= aux->prioridade){
+    ant = ant->prox;
+  }
+  aux->prox = ant->prox;
+  aux->ant = ant;
+  ant->prox = aux;
+  (aux->prox)->ant = aux;
 
   resposta = true;
   return resposta;
@@ -127,6 +140,18 @@ bool reduzirPrioridade(PFILA f, int id, float novaPrioridade){
   bool resposta = false;
   PONT aux = buscaSeq(f, id);
   if(id < 0 || id >= f->maxElementos || aux == NULL || aux->prioridade <= novaPrioridade) return resposta;
+  aux->prioridade = novaPrioridade;
+  (aux->prox)->ant = aux->ant;
+  (aux->ant)->prox = aux->prox;
+
+  PONT ant = f->fila;
+  while (ant->prox != f->fila && (ant->prox)->prioridade >= aux->prioridade){
+    ant = ant->prox;
+  }
+  aux->prox = ant->prox;
+  aux->ant = ant;
+  ant->prox = aux;
+  (aux->prox)->ant = aux;
 
   resposta = true;
   return resposta;
